@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+
 export default function App() {
 
   // A function that allow the user to access his camera
@@ -64,9 +65,51 @@ export default function App() {
     }
   }
 
+  async function onUploadIDClicked() {
+
+    const result = await takePicture();
+
+    if (!result.cancelled) {
+      const image = result.base64;
+      // Performs text detection on the local file
+
+      let body = JSON.stringify({
+        requests: [
+          {
+            image: {
+              content: image
+            },
+            features: [
+              {
+                type: "TEXT_DETECTION"
+              }
+            ]
+          }
+        ]
+      });
+
+      let response = await fetch(
+        'https://vision.googleapis.com/v1/images:annotate?key=' +
+        "<Google API Key>",
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: body
+        }
+      );
+
+      let responseJson = await response.json();
+      console.log(responseJson);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Button title="Upload" onPress={onUploadPictureClicked} />
+      <Button title="Text Recognition" onPress={onUploadIDClicked} />
       <StatusBar style="auto" />
     </View>
   );
