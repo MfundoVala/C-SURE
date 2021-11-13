@@ -1,7 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import LoginScreen from './screens/login'
+import { Btn, Combobox } from './components';
+import { COLORS, SIZES, FONTS_FAMILY, FONTS, SHADOW } from "./constants"
+import bgImage from './assets/bgImage.jpg'
+import React, { useState, useEffect, useCallback } from "react"
+
+
+
 
 
 export default function App() {
@@ -89,8 +96,7 @@ export default function App() {
       });
 
       let response = await fetch(
-        'https://vision.googleapis.com/v1/images:annotate?key=' +
-        "<Google API Key>",
+        'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyD_JvXyKj3DlEc2CdW_6nV2fIqDWZBsfdM',
         {
           headers: {
             Accept: 'application/json',
@@ -108,18 +114,54 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Button title="Upload" onPress={onUploadPictureClicked} />
-      <Button title="Text Recognition" onPress={onUploadIDClicked} />
       <StatusBar style="auto" />
+
+      <ImageBackground source={bgImage} resizeMode="stretch" style={styles.background} />
+
+      <Btn title="Text Recognition" onPress={onUploadIDClicked} />
+      <Btn style={{ marginTop: SIZES.padding * 2, backgroundColor: COLORS.secondary }} title="Upload" onPress={onUploadPictureClicked} />
+      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+      flex: 1,
+      padding: SIZES.padding,
+      paddingTop: Platform.OS === "ios" ? 40 : StatusBar.currentHeight,
+      width: '100%',
+      backgroundColor: COLORS.white
   },
-});
+  background: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      flex: 1,
+      zIndex: 0
+  },
+  Box: {
+      ...SHADOW,
+      borderRadius: SIZES.smallRadius,
+      padding: SIZES.padding * 3,
+      marginVertical: SIZES.padding,
+      width: "48%",
+      alignItems: "center",
+      justifyContent: "center",
+  },
+  modalContainer2: {
+      backgroundColor: COLORS.white,
+      borderTopLeftRadius: SIZES.radius,
+      borderTopRightRadius: SIZES.radius,
+      height: "100%",
+      alignItems: "center",
+  },
+  navBar: {
+      width: "100%",
+      minHeight: 60,
+      backgroundColor: COLORS.white,
+      justifyContent: 'center',
+      padding: SIZES.padding,
+      alignItems: "center",
+  },
+})
