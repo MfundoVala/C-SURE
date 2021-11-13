@@ -1,4 +1,23 @@
 import COLORS from "./color"
+import Start_BG from "../../assets/images/Start_BG.jpg"
+import Logo from "../../assets/images/logo.png"
+import LOGIN_BG from "../../assets/images/LOGIN_BG.jpg"
+import APP_BG from "../../assets/images/APP_BG.jpg"
+import google from "../../assets/images/google.png"
+import meta from "../../assets/images/meta.png"
+import email from "../../assets/images/email.png"
+import palm from "../../assets/images/palm.png"
+
+const IMAGES = {
+    Start_BG,
+    Logo,
+    LOGIN_BG,
+    google,
+    meta,
+    email,
+    APP_BG,
+    palm
+}
 
 const SIZES = {
     padding: 19,
@@ -8,7 +27,7 @@ const SIZES = {
     h3: 20,
     h4: 18,
     h5: 16,
-    h4: 14
+    h6: 14
 }
 
 const SHADOW = {
@@ -52,5 +71,5 @@ const FONTS = {
     h6_Regular: {fontSize: SIZES.h6, fontFamily: "RobotoRegular"}, 
 }
 
-export {COLORS, SIZES}
+export {COLORS, SIZES, FONTS, SHADOW, IMAGES}
 
