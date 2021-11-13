@@ -4,6 +4,7 @@ import { COLORS, SIZES, FONTS, IMAGES } from "../constants"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Card, Btn } from "../components"
 import { Camera } from 'expo-camera';
+import { requestQuote } from "../functions"
 import * as FaceDetector from 'expo-face-detector';
 import QuoteScreen from './quoteScreen';
 
@@ -74,6 +75,7 @@ export default function HomeScreen({ navigation }) {
         const [pageTitle, setPageTitle] = useState("Snap a quote")
         const [showPage, setShowPage] = useState(1)
         const [data, setData] = useState(null)
+        const [age, setAge] = useState(null)
 
         async function requestCameraPermission() {
             const { status } = await Camera.requestCameraPermissionsAsync();
@@ -85,10 +87,47 @@ export default function HomeScreen({ navigation }) {
             setIsDetected(false)
             setCountDown(5)
             setShowPage(1)
+            setAge(null)
         }
 
-        const onContinueClicked = () => {
+        async function requestQuote(data) {
+
+            // Creating the image
+            const image = {
+              uri: data,
+              type: 'image/jpeg',
+              name: 'myImage' + '-' + Date.now() + '.jpg'
+            }
+      
+            // Instantiate a FormData() object
+            const imgBody = new FormData();
+            // append the image to the object with the title 'image'
+            imgBody.append('data', image);
+      
+            console.log(imgBody)
+            const url = `https://api.everypixel.com/v1/faces`;
+            // Perform the request. Note the content type - very important
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+                'Authorization': "Basic V0dGYmJwUkV1YmliNExtSTk2TWEzakRZOmE3a2luOXZyNG9EcWtqc2RScXBaNGdLeENZY1QzMW5CYUtGSjdoc3RUb0I3YnAzdQ=="
+              },
+              body: imgBody
+      
+            }).then(res => res.json()).then(results => {
+              // Getting the data back from the API
+              
+              setAge(results.faces[0].age);
+            }).catch(error => {
+              console.error(error);
+            });
+        }
+
+        const onContinueClicked = async() => {
             init();
+            await requestQuote(data)
             setPageTitle('Your quote')
             setShowPage(2)
         }
@@ -168,7 +207,7 @@ export default function HomeScreen({ navigation }) {
         >
             <View style={{ width: "100%", height: "100%" }}>
                 <StatusBar barStyle="dark-content" translucent={true} backgroundColor={"transparent"} />
-                <Image style={{...styles.img, marginTop: -38}} source={IMAGES.APP_BG} resizeMode="stretch" />
+                <Image style={{ ...styles.img, marginTop: -38 }} source={IMAGES.APP_BG} resizeMode="stretch" />
                 <View style={{ ...styles.container, paddingTop: 0 }}>
 
                     {/* // Top Header */}
@@ -233,7 +272,7 @@ export default function HomeScreen({ navigation }) {
 
 
                             {/* // Showing quote screen */}
-                            {showPage === 2 && <QuoteScreen data={data} />}
+                            {age !== null && showPage === 2 && <QuoteScreen data={age} />}
                         </View>
                     </View>
 

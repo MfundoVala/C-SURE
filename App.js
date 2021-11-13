@@ -6,7 +6,7 @@ import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import Tabs from "./src/navigation"
 import { takePicture } from "./src/functions"
-import { onBoardingScreen } from "./src/screens"
+import { onBoardingScreen, LoginScreen } from "./src/screens"
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -14,45 +14,6 @@ import * as ImagePicker from 'expo-image-picker';
 const Stack = createStackNavigator();
 
 export default function App() {
-
-  async function onUploadPictureClicked() {
-    // Calling Take Picture Function
-    const result = await takePicture();
-
-    if (!result.cancelled) {
-
-      // Creating the image
-      const image = {
-        uri: result.uri,
-        type: 'image/jpeg',
-        name: 'myImage' + '-' + Date.now() + '.jpg'
-      }
-
-      // Instantiate a FormData() object
-      const imgBody = new FormData();
-      // append the image to the object with the title 'image'
-      imgBody.append('data', image);
-
-      console.log(imgBody)
-      const url = `https://api.everypixel.com/v1/faces`;
-      // Perform the request. Note the content type - very important
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
-          'Authorization': "Basic V0dGYmJwUkV1YmliNExtSTk2TWEzakRZOmE3a2luOXZyNG9EcWtqc2RScXBaNGdLeENZY1QzMW5CYUtGSjdoc3RUb0I3YnAzdQ=="
-        },
-        body: imgBody
-
-      }).then(res => res.json()).then(results => {
-        // Getting the data back from the API
-        alert("You are " + results.faces[0].age)
-      }).catch(error => {
-        console.error(error);
-      });
-    }
-  }
 
   async function onUploadIDClicked() {
 
@@ -156,7 +117,7 @@ export default function App() {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       const { status2 } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  })();
+    })();
   }, [])
 
 
@@ -179,7 +140,6 @@ export default function App() {
           screenOptions={{
             headerShown: false
           }}
-          initialRouteName={'Home1'}
         >
           <Stack.Screen name="onBoarding" component={onBoardingScreen} options={{
             headerShown: false

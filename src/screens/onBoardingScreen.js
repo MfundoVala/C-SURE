@@ -58,7 +58,7 @@ export default function onBoardingScreen({ navigation }) {
 
         function CustomBtn(icon, title, action, color, color2) {
             return <TouchableOpacity
-                onPress={action !== null ? () => action(): null}
+                onPress={() => navigation.navigate("Home1")}
                 style={{ ...styles2.btn, backgroundColor: color || COLORS.white }}
             >
                 <Image style={{ maxWidth: 60, height: 40, marginRight: 15 }} source={icon} resizeMode="contain" />

@@ -1,6 +1,7 @@
 import onBoardingScreen from "./onBoardingScreen"
 import HomeScreen from "./homeScreen"
 import quoteScreen from "./quoteScreen"
+import LoginScreen from "./LoginScreen"
 
 
 function ClaimScreen(){
@@ -15,4 +16,4 @@ function ProfileScreen(){
     return null
 }
 
-export {HomeScreen, NotificationScreen, ProfileScreen, ClaimScreen, onBoardingScreen, quoteScreen}
+export {HomeScreen, NotificationScreen, ProfileScreen, ClaimScreen, onBoardingScreen, quoteScreen, LoginScreen}

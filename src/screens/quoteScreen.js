@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StatusBar, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { COLORS, SIZES, FONTS, IMAGES } from "../constants"
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -33,6 +33,15 @@ const styles = StyleSheet.create({
 
 export default function quoteScreen(props) {
 
+    const [age, setAge] = useState(0)
+
+    useEffect(() => {
+        setAge(Math.round(props.data))
+        console.log(props.data)
+    }, [])
+
+    const price = age <= 18 ? 180 : age <= 30 ? 230 : 320
+
     return <View style={{ width: "100%", height: "100%", marginTop: -20, paddingBottom: 30 }}>
 
         {/* // Identity Card */}
@@ -40,7 +49,7 @@ export default function quoteScreen(props) {
             <Icon name="account-circle" style={styles.imgProfile} size={110} color={COLORS.white} />
             <View style={{ alignItems: 'center' }}>
                 <Text style={{ ...FONTS.h3_Bold, color: COLORS.white }}>Mfundo Cele</Text>
-                <Text style={{ ...FONTS.h3_Bold, color: COLORS.accent, fontSize: 64 }}>30</Text>
+                <Text style={{ ...FONTS.h3_Bold, color: COLORS.accent, fontSize: 64 }}>{age}</Text>
                 <Text style={{ ...FONTS.h3_Bold, color: COLORS.white }}>Years Old</Text>
             </View>
         </View>
@@ -55,7 +64,7 @@ export default function quoteScreen(props) {
 
             <View style={styles.cardWrapper}>
                 <Card icon={IMAGES.email} style={{ width: 80, height: 80, borderRadius: 15 }} />
-                <Text style={{ ...FONTS.h5_Medium, marginLeft: 15 }} >Life Cover - R380 pm</Text>
+                <Text style={{ ...FONTS.h5_Medium, marginLeft: 15 }} >Life Cover - R{price} pm</Text>
             </View>
 
             <View style={styles.cardWrapper}>

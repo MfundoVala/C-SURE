@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS, SIZES, FONTS, IMAGES } from "../constants"
+import { Input, Btn } from "../components"
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 const styles = StyleSheet.create({
     container: {
-        padding: SIZES.padding,
-        paddingTop: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight + 10,
+        paddingTop: Platform.OS === 'ios' ? 40 : StatusBar.currentHeight,
         flex: 1,
         width: "100%",
     },
@@ -35,35 +37,41 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center",
         borderRadius: 10
+    },
+    bg:{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        right: 0,
+        left: 0,
+        top: 0,
+        backgroundColor: COLORS.primary, 
+        borderTopRightRadius: 35,
+        zIndex: -1
     }
 })
 
 
-export default function onBoardingScreen({ navigation }) {
+export default function LoginScreen({ navigation }) {
     return <View style={{ width: "100%", height: "100%" }}>
-        <StatusBar barStyle="light-content" translucent={true} backgroundColor={"transparent"} />
-        <Image style={styles.img} source={IMAGES.Start_BG} resizeMode="stretch" />
+        <StatusBar barStyle="dark-content" translucent={true} backgroundColor={"transparent"} />
         <View style={styles.container}>
-            <Text style={{ ...FONTS.h3_Regular, color: COLORS.white }}>Insure your <Text style={{ ...FONTS.h3_Bold, color: COLORS.white }}>SAMSUNG GALAXY S10 </Text>
-                today for as little as R106 pm.
-            </Text>
-
-            {/* Logo section */}
-            <Image style={styles.logo} source={IMAGES.Logo} resizeMode="stretch" />
-
-            {/* Description section */}
-            <Text style={FONTS.h1_Bold}>Molo!</Text>
-            <Text style={FONTS.h3_Bold}>{"We are C-SURE \nyour one snap insurance app"}</Text>
-
-            {/* Join us button */}
-            <TouchableOpacity style={styles.btn}>
-                <Text style={{ ...FONTS.h1_Bold, fontSize: 30 }} >JOIN US</Text>
+            <TouchableOpacity style={{marginTop: 10}} onPress={() => navigation.goBack()}>
+                <Icon name="arrow-back" size={30} color={COLORS.black} />
             </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={{ ...FONTS.h3_Bold, color: COLORS.white, alignSelf: 'center' }}>Already a member?
-                    <Text style={{ ...FONTS.h3_Bold, color: COLORS.primary, }}> Sign in</Text>
-                </Text>
-            </TouchableOpacity>
+
+            {/* // Credentials */}
+            <View style={{ alignItems: 'center' }}>
+            <Text style={{ ...FONTS.h1_Bold, color: COLORS.primary, marginTop: "25%", marginBottom: 20 }}>Login</Text>
+                <Input style={{ marginBottom: 20}} placeholder="Email Address" />
+                <Input placeholder="Password" />
+                <Btn title="Login" />
+            </View>
+
+            <View style={styles.bg}></View>
+
+
         </View>
     </View>
 }
