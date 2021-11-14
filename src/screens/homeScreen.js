@@ -317,7 +317,7 @@ export default function HomeScreen({ route, navigation }) {
         <View style={styles.container}>
 
             {/* // Top Header */}
-            <View style={styles.topHeader}>
+            <View style={{...styles.topHeader, justifyContent: "space-between"}}>
                 <Text style={{ ...FONTS.h1_Bold, fontSize: 30, marginRight: 15 }}>Snap a quote</Text>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image style={{ height: 40, width: 40, marginRight: 15 }} source={IMAGES.go} resizeMode="contain" />
