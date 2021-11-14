@@ -96,7 +96,7 @@ export default function App() {
       });
 
       let response = await fetch(
-        'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyD_JvXyKj3DlEc2CdW_6nV2fIqDWZBsfdM',
+        'https://vision.googleapis.com/v1/images:annotate?key=<GOOGLE API KEY>',
         {
           headers: {
             Accept: 'application/json',
