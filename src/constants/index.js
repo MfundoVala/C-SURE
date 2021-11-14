@@ -7,6 +7,12 @@ import google from "../../assets/images/google.png"
 import meta from "../../assets/images/meta.png"
 import email from "../../assets/images/email.png"
 import palm from "../../assets/images/palm.png"
+import camera from "../../assets/images/camera.jpg"
+import baby from "../../assets/images/baby.jpg"
+import car from "../../assets/images/car.jpg"
+import go from "../../assets/images/go.jpg"
+import person from "../../assets/images/person.jpg"
+import phone from "../../assets/images/phone.jpg"
 
 const IMAGES = {
     Start_BG,
@@ -16,7 +22,13 @@ const IMAGES = {
     meta,
     email,
     APP_BG,
-    palm
+    palm,
+    camera,
+    baby,
+    car,
+    go,
+    person,
+    phone
 }
 
 const SIZES = {

@@ -63,12 +63,12 @@ export default function quoteScreen(props) {
             }}>
 
             <View style={styles.cardWrapper}>
-                <Card icon={IMAGES.email} style={{ width: 80, height: 80, borderRadius: 15 }} />
+                <Card icon={IMAGES.person} style={{ width: 80, height: 80, borderRadius: 15 }} />
                 <Text style={{ ...FONTS.h5_Medium, marginLeft: 15 }} >Life Cover - R{price} pm</Text>
             </View>
 
             <View style={styles.cardWrapper}>
-                <Card icon={IMAGES.email} style={{ width: 80, height: 80, borderRadius: 15 }} />
+                <Card icon={IMAGES.baby} style={{ width: 80, height: 80, borderRadius: 15 }} />
                 <View style={{ marginLeft: 15 }}>
                     <Text style={{ ...FONTS.h5_Medium }} >Dependants - FREE! (Ts & Cs apply)</Text>
                     <Text style={{ ...FONTS.h5_Medium }} >Family - R180 pm (Ts & Cs apply)</Text>
@@ -76,29 +76,29 @@ export default function quoteScreen(props) {
             </View>
 
             <View style={styles.cardWrapper}>
-                <Card icon={IMAGES.email} style={{ width: 80, height: 80, borderRadius: 15, backgroundColor: COLORS.accent }} />
+                <Card icon={IMAGES.car} style={{ width: 80, height: 80, borderRadius: 15, backgroundColor: COLORS.accent }} />
                 <View style={{ marginLeft: 15 }}>
                     <Text style={{ ...FONTS.h4_Bold }} >Snap a quote</Text>
                     <Text style={{ ...FONTS.h6_Regular }} >Snap a pic if your care to get a quote.</Text>
                 </View>
                 <TouchableOpacity style={{ marginLeft: 10 }} onPress={null}>
-                    <Icon name="photo-camera" size={40} color={COLORS.black} />
+                    <Image style={{ height: 40, width: 40 }} source={IMAGES.camera} resizeMode="contain" />
                 </TouchableOpacity>
             </View>
 
             <View style={styles.cardWrapper}>
-                <Card icon={IMAGES.email} style={{ width: 80, height: 80, borderRadius: 15, backgroundColor: COLORS.accent }} />
+                <Card icon={IMAGES.phone} style={{ width: 80, height: 80, borderRadius: 15, backgroundColor: COLORS.accent }} />
                 <View style={{ marginLeft: 15 }}>
                     <Text style={{ ...FONTS.h4_Bold }} >Snap a quote</Text>
                     <Text style={{ ...FONTS.h6_Regular }} >Snap a pic if your care to get a quote.</Text>
                 </View>
                 <TouchableOpacity style={{ marginLeft: 10 }} onPress={null}>
-                    <Icon name="photo-camera" size={40} color={COLORS.black} />
+                    <Image style={{ height: 40, width: 40 }} source={IMAGES.camera} resizeMode="contain" />
                 </TouchableOpacity>
             </View>
 
         </ScrollView>
-        <TouchableOpacity style={{alignItems: "center"}}>
+        <TouchableOpacity style={{ alignItems: "center" }}>
             <Text style={{ ...FONTS.h5_Bold }}>Did we get this wrong? <Text style={{ ...FONTS.h4_Bold, color: COLORS.primary }}>Enter your correct age.</Text></Text>
         </TouchableOpacity>
 

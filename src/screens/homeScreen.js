@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, StatusBar, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { COLORS, SIZES, FONTS, IMAGES } from "../constants"
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Card, Btn } from "../components"
+import { Card, Btn, Loading } from "../components"
 import { Camera } from 'expo-camera';
 import { requestQuote } from "../functions"
 import * as FaceDetector from 'expo-face-detector';
@@ -60,7 +60,25 @@ const styles = StyleSheet.create({
 })
 
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (route.params?.data) {
+                setUser(route.params.data)
+                console.log(route.params.data)
+            }
+            console.log(route.params?.data)
+        });
+    
+        return () => unsubscribe;
+      }, [navigation]);
+
+
+    const [user, setUser] = useState({
+        name: "Not",
+        surname: "Identify"
+    })
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -94,38 +112,44 @@ export default function HomeScreen({ navigation }) {
 
             // Creating the image
             const image = {
-              uri: data,
-              type: 'image/jpeg',
-              name: 'myImage' + '-' + Date.now() + '.jpg'
+                uri: data,
+                type: 'image/jpeg',
+                name: 'myImage' + '-' + Date.now() + '.jpg'
             }
-      
+
             // Instantiate a FormData() object
             const imgBody = new FormData();
             // append the image to the object with the title 'image'
             imgBody.append('data', image);
-      
+
             console.log(imgBody)
             const url = `https://api.everypixel.com/v1/faces`;
             // Perform the request. Note the content type - very important
             fetch(url, {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data',
-                'Authorization': "Basic V0dGYmJwUkV1YmliNExtSTk2TWEzakRZOmE3a2luOXZyNG9EcWtqc2RScXBaNGdLeENZY1QzMW5CYUtGSjdoc3RUb0I3YnAzdQ=="
-              },
-              body: imgBody
-      
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': "Basic V0dGYmJwUkV1YmliNExtSTk2TWEzakRZOmE3a2luOXZyNG9EcWtqc2RScXBaNGdLeENZY1QzMW5CYUtGSjdoc3RUb0I3YnAzdQ=="
+                },
+                body: imgBody
+
             }).then(res => res.json()).then(results => {
-              // Getting the data back from the API
-              
-              setAge(results.faces[0].age);
+                // Getting the data back from the API
+                if (results.faces.length > 0) {
+                    console.log(results)
+                    setAge(results.faces[0].age);
+                } else {
+                    setShowPage(1);
+                    alert("Oops, something went wrong, please try again.")
+                }
+
             }).catch(error => {
-              console.error(error);
+                console.error(error);
             });
         }
 
-        const onContinueClicked = async() => {
+        const onContinueClicked = async () => {
             init();
             await requestQuote(data)
             setPageTitle('Your quote')
@@ -273,6 +297,7 @@ export default function HomeScreen({ navigation }) {
 
                             {/* // Showing quote screen */}
                             {age !== null && showPage === 2 && <QuoteScreen data={age} />}
+                            {age === null && showPage === 2 && <Loading light={true} isLoading={age === null ? true : false} />}
                         </View>
                     </View>
 
@@ -292,22 +317,29 @@ export default function HomeScreen({ navigation }) {
             {/* // Top Header */}
             <View style={styles.topHeader}>
                 <Text style={{ ...FONTS.h1_Bold, fontSize: 30, marginRight: 15 }}>Snap a quote</Text>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Icon name="photo-camera" size={40} color={COLORS.black} />
-                </TouchableOpacity>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image style={{ height: 40, width: 40, marginRight: 15 }} source={IMAGES.go} resizeMode="contain" />
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <Image style={{ height: 40, width: 40 }} source={IMAGES.camera} resizeMode="contain" />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             {/* // Identity Card */}
             <View style={styles.IDCard}>
                 <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
                     <Icon name="account-circle" style={styles.imgProfile} size={80} color={COLORS.black} />
-                    <Text style={{ ...FONTS.h3_Bold, color: COLORS.white, marginLeft: 10 }}>Mfundo Cele</Text>
+                    <Text style={{ ...FONTS.h3_Bold, color: COLORS.white, marginLeft: 10 }}>{user.name} {user.surname}</Text>
                 </View>
-                <Text style={{ ...FONTS.h3_Regular, color: COLORS.white }}>{"Welcome back "} <Text style={{ ...FONTS.h3_Bold, color: COLORS.white }}>Sizwe.</Text></Text>
+                <Text style={{ ...FONTS.h3_Regular, color: COLORS.white }}>{"Welcome back"} <Text style={{ ...FONTS.h3_Bold, color: COLORS.white }}>Sizwe.</Text></Text>
                 <Text style={{ ...FONTS.h3_Regular, color: COLORS.white, marginBottom: 10 }}>{"Sure is nice to C you again!"}</Text>
 
                 <Image style={styles.palmImg} source={IMAGES.palm} resizeMode="contain" />
             </View>
+
+
+            <Btn title="Become a member" style={{ marginBottom: 10 }} onPress={() => navigation.navigate("Scan")} />
+
 
             <ScrollView style={{ flex: 1, marginBottom: 0 }}
                 showsVerticalScrollIndicator={false}
@@ -315,31 +347,32 @@ export default function HomeScreen({ navigation }) {
                     paddingBottom: "10%",
                     marginBottom: 0
                 }}>
+
                 {/* // Personal Section */}
-                <Text style={{ ...FONTS.h3_Medium, marginVertical: 20 }} >PERSONAL</Text>
+                <Text style={{ ...FONTS.h3_Medium, marginTop: 10, marginBottom: 20 }} >PERSONAL</Text>
                 <View style={styles.cardWrapper}>
                     <View>
-                        <Card icon={IMAGES.google} />
-                        <Text style={{ ...FONTS.h3_Medium, alignSelf: 'center', marginTop: 5 }}>Me</Text>
+                        <Card icon={IMAGES.person} />
+                        <Text style={{ ...FONTS.h4_Medium, alignSelf: 'center', marginTop: 5 }}>Me</Text>
                     </View>
                     <View>
-                        <Card icon={IMAGES.google} />
-                        <Text style={{ ...FONTS.h3_Medium, alignSelf: 'center', marginTop: 5 }}>My Family</Text>
+                        <Card icon={IMAGES.baby} />
+                        <Text style={{ ...FONTS.h4_Medium, alignSelf: 'center', marginTop: 5 }}>My Family</Text>
                     </View>
                 </View>
 
                 {/* // Stuff Section */}
-                <Text style={{ ...FONTS.h3_Medium, marginVertical: 20 }} >STUFF</Text>
+                <Text style={{ ...FONTS.h4_Medium, marginVertical: 20 }} >STUFF</Text>
                 <View style={styles.cardWrapper}>
                     <View>
-                        <Card icon={IMAGES.google} style={{ backgroundColor: COLORS.accent }} />
-                        <Text style={{ ...FONTS.h3_Medium, alignSelf: 'center', marginTop: 5 }}>My Vehicles</Text>
-                        <Text style={{ ...FONTS.h4_Regular, alignSelf: 'center' }}>2017 Mercedes X class</Text>
+                        <Card icon={IMAGES.car} style={{ backgroundColor: COLORS.accent }} />
+                        <Text style={{ ...FONTS.h4_Medium, alignSelf: 'center', marginTop: 5 }}>My Vehicles</Text>
+                        <Text style={{ ...FONTS.h5_Regular, alignSelf: 'center' }}>2017 Mercedes X...</Text>
                     </View>
                     <View>
-                        <Card icon={IMAGES.google} style={{ backgroundColor: COLORS.accent }} />
-                        <Text style={{ ...FONTS.h3_Medium, alignSelf: 'center', marginTop: 5 }}>My Cellphones</Text>
-                        <Text style={{ ...FONTS.h4_Regular, alignSelf: 'center' }}>Samsung galaxy S10...</Text>
+                        <Card icon={IMAGES.phone} style={{ backgroundColor: COLORS.accent }} />
+                        <Text style={{ ...FONTS.h4_Medium, alignSelf: 'center', marginTop: 5 }}>My Cellphones</Text>
+                        <Text style={{ ...FONTS.h5_Regular, alignSelf: 'center' }}>Samsung galaxy S...</Text>
                     </View>
                 </View>
             </ScrollView>

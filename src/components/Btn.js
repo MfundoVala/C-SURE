@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     btn: {
         marginBottom: 20,
         paddingVertical: 8,
-        width: "92%",
+        width: "100%",
         backgroundColor: COLORS.secondary,
         marginVertical: 20,
         alignItems: "center",
