@@ -4,9 +4,10 @@ import { COLORS, SIZES, FONTS, IMAGES } from "../constants"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Card, Btn, Loading } from "../components"
 import { Camera } from 'expo-camera';
-import { requestQuote } from "../functions"
 import * as FaceDetector from 'expo-face-detector';
 import QuoteScreen from './quoteScreen';
+import { UserStore } from "../redux"
+
 
 const styles = StyleSheet.create({
     container: {
@@ -62,17 +63,18 @@ const styles = StyleSheet.create({
 
 export default function HomeScreen({ route, navigation }) {
 
+    const [showBecomeAMemBtn, setShowBecomeAMemBtn] = useState(true);
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            if (route.params?.data) {
-                setUser(route.params.data)
-                console.log(route.params.data)
+            if (UserStore.getState()?.user) {
+                setUser(UserStore.getState()?.user)
+                setShowBecomeAMemBtn(false)
             }
-            console.log(route.params?.data)
         });
-    
+
         return () => unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
 
 
     const [user, setUser] = useState({
@@ -338,7 +340,7 @@ export default function HomeScreen({ route, navigation }) {
             </View>
 
 
-            <Btn title="Become a member" style={{ marginBottom: 10 }} onPress={() => navigation.navigate("Scan")} />
+            {showBecomeAMemBtn && <Btn title="Become a member" style={{ marginBottom: 10 }} onPress={() => navigation.navigate("Scan")} />}
 
 
             <ScrollView style={{ flex: 1, marginBottom: 0 }}

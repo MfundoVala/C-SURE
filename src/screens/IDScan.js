@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Card, Btn, Loading } from "../components"
 import { Camera } from 'expo-camera';
 import { uploadID } from "../functions"
+import {UserStore} from "../redux"
 
 const styles = StyleSheet.create({
     container: {
@@ -102,7 +103,12 @@ export default function QuoteModal({ navigation }) {
         init();
         setIsLoading(true)
         const d = await uploadID(data).then(res => {
-            navigation.navigate("Home1", {response: "OK", data: res})
+            UserStore.dispatch({
+                type: "set",
+                data: res
+            })
+
+            navigation.goBack()
             alert("Thank you! \nYour data has been captured successfully!")
             setIsLoading(false)
         }).catch(err => {
